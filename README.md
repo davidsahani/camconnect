@@ -18,23 +18,40 @@ CamConnect lets you turn your smartphone into a wireless webcam for your PC, pro
 
 <img src="images/preview.gif"/>
 
-### Release Builds
+## Building CamConnect
 
-When it comes to the release builds, here's what you need to know:
+Follow these steps to successfully build camconnect on your system.
 
-- **Android**:
-  - For new arm-based Android devices, you can download the version ending with `*arm64-v8a.apk.`
-  - If the above version is not compatible with your device (indicating a non-arm64 architecture), please use the version ending with `*armeabi-v7a.apk.`
-  - For x86_64-based Android devices, you can download the version ending with `*x86_64.apk.`
+### 1. Install Flutter
 
-- **Windows**:
-  - For Windows, simply download the `camconnect.zip` file.
+Install Flutter by following the instructions provided in the [Getting started with Flutter](https://docs.flutter.dev/get-started/install).
 
-- **Driver**:
-  - Download the `camconnect-driver.zip` for driver installation files.
-  - Refer to [camconnect-driver/README.md](camconnect-driver/README.md#installing-the-driver) for installation instructions.
+**Visual Studio Development Tools:**
 
-> [!WARNING]
-> Current version of the driver is not digitally signed and is in beta stage thus by using this driver,
->
-> You acknowledge and accept full responsibility for any potential damages or disruptions it may cause to your system or environment.
+Download the [Visual Studio](https://docs.flutter.dev/get-started/install/windows/desktop#development-tools) version mentioned in the Flutter documentation and select the `Desktop development with C++` workload. You can also use [Visual C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) if preferred.
+
+### 2. Verify Installation
+
+- Confirm that Flutter is added to your system's PATH environment variable to execute it from the command line.
+
+- Ensure you have installed the necessary build dependencies for Flutter to run successfully.
+
+- Run `flutter doctor` in the command line to verify that there are no issues.
+
+### 3. Install Inno setup installer
+1. Download Inno Setup from here: https://jrsoftware.org/isinfo.php
+
+2. Open the setup and install it on your system.
+
+3. Make sure it is installed in `C:\Program Files (x86)`.
+
+### 4. Build Projects
+
+1. Open a command prompt and navigate to the project directory.
+
+2. Run the following command to build the projects:
+```bash
+python build.py
+```
+
+**Note:** Build script will build the applications in release mode and copy the binaries to the `project/build` directory.
