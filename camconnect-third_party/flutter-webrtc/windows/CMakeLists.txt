@@ -22,6 +22,7 @@ add_library(${PLUGIN_NAME} SHARED
   "../common/cpp/src/flutter_webrtc.cc"
   "../common/cpp/src/flutter_webrtc_base.cc"
   "../common/cpp/src/driver_interface_video_proc_thread.cc"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/driver_interface/driver_interface.cpp"
   "../third_party/uuidxx/uuidxx.cc"
 )
 
@@ -30,7 +31,7 @@ include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/uuidxx"
   "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/svpng"
   "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/libwebrtc/include"
-  "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/driver_interface/include"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/driver_interface"
 )
 
 apply_standard_settings(${PLUGIN_NAME})
@@ -51,20 +52,3 @@ set(flutter_webrtc_bundled_libraries
   "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/libwebrtc/lib/win64/libwebrtc.dll"
   PARENT_SCOPE
 )
-
-# ===================== Link driver-interface library ===================== #
-
-set(DRIVER_INTERFACE_DEBUG_LIB_FILE 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/driver_interface/lib/win64/Debug/DriverInterface.lib"
-)
-set(DRIVER_INTERFACE_RELEASE_LIB_FILE 
-  "${CMAKE_CURRENT_SOURCE_DIR}/../third_party/driver_interface/lib/win64/Release/DriverInterface.lib"
-)
-target_link_libraries(${PLUGIN_NAME} PRIVATE
-  $<$<CONFIG:Debug>:${DRIVER_INTERFACE_DEBUG_LIB_FILE}>
-  $<$<CONFIG:Profile>:${DRIVER_INTERFACE_RELEASE_LIB_FILE}>
-  $<$<CONFIG:Release>:${DRIVER_INTERFACE_RELEASE_LIB_FILE}>
-)
-
-# Ignore linker warning: 4099 for debug configuration mode
-target_link_options(${PLUGIN_NAME} PRIVATE $<$<CONFIG:Debug>:/ignore:4099>)

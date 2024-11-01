@@ -18,9 +18,7 @@ FlutterWebRTC::FlutterWebRTC(FlutterWebRTCPlugin* plugin)
   driver_interface::DriverInterfaceEventHandler::Initialize(plugin->messenger());
 }
 
-FlutterWebRTC::~FlutterWebRTC() {
-  DriverInterface::Release(); // release all the resources.
-}
+FlutterWebRTC::~FlutterWebRTC() {}
 
 void FlutterWebRTC::HandleMethodCall(
     const MethodCallProxy& method_call,

@@ -17,21 +17,9 @@ inline bool HandleDriverInterfaceMethodCall(const MethodCallProxy& method_call, 
 
   static const std::unordered_map<std::string, std::function<void()>> methodHandlers = {
     {"DriverInterface::GetDevices", [&] {
-      std::vector<DeviceInfo> devicesInfo;
-      const int status = DriverInterface::GetDevices(devicesInfo);
-
-      if (status) {
-        if (status == -1) {
-          result->Error("DriverInterface::GetDevices", "COM library initialization failed.");
-        } else {
-          result->Error("DriverInterface::GetDevices", "Failed to get devices information.");
-        }
-        return; // on failure
-      }
-
       EncodableList deviceInfoList;
 
-      for (const DeviceInfo deviceInfo : devicesInfo) {
+      for (const DeviceInfo deviceInfo: DriverInterface::GetDevices()) {
         EncodableMap info;
         info[EncodableValue("deviceName")] = EncodableValue(deviceInfo.friendlyName);
         info[EncodableValue("devicePath")] = EncodableValue(deviceInfo.devicePath);
@@ -62,27 +50,6 @@ inline bool HandleDriverInterfaceMethodCall(const MethodCallProxy& method_call, 
           case 1:
             result->Error("DriverInterface::SetDevice", "Device not found.");
             break;
-          case 2:
-            result->Error("DriverInterface::SetDevice", "Failed to create filter.");
-            break;
-          case 3:
-            result->Error("DriverInterface::SetDevice", "Failed to obtain the IPropertySet interface.");
-            break;
-          case 4:
-            result->Error("DriverInterface::SetDevice", "Failed to determine property support.");
-            break;
-          case 5:
-            result->Error("DriverInterface::SetDevice", "The device does not support property setting.");
-            break;
-          case -1:
-            result->Error("DriverInterface::SetDevice", "Failed to enumerate devices.");
-            break;
-          case -2:
-            result->Error("DriverInterface::SetDevice", "No Video input device available.");
-            break;
-          case -3:
-            result->Error("DriverInterface::SetDevice", "COM library initialization failed.");
-            break;
           default:
             result->Error("DriverInterface::SetDevice",
                 "Failed with unknown status code: " + std::to_string(status)
@@ -92,10 +59,6 @@ inline bool HandleDriverInterfaceMethodCall(const MethodCallProxy& method_call, 
     }},
     {"DriverInterface::DestroyDevice", [&] {
       DriverInterface::DestroyDevice();
-      result->Success();
-    }},
-    {"DriverInterface::Release", [&] {
-      DriverInterface::Release();
       result->Success();
     }},
     {"DriverInterface::StartVideoProcessing", [&] {
